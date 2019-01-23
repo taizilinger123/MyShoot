@@ -1,0 +1,60 @@
+Shoot游戏第一天
+
+做项目是学东西最快的时期
+
+24个步骤
+第一天：讲16个--------页面上能画出4个对象
+第二天：讲4个---------所有对象动起来
+第三天：讲4个---------开打
+
+英雄机打掉一个敌机------得5分
+英雄机可以发射子弹(单发或者双发)
+默认为单发(火力值为0)
+英雄机打掉小蜜蜂后得奖励，
+奖励分两种：一种是命，一种是火力值
+
+发射一次双倍减2
+一次得40火力值--------40 
+发了5次-------------40-10=30
+得了一次火力----------30+40=70
+得了一次火力----------70+40=110
+火力值为10000
+英雄机死了一次---------0(单倍)
+
+从上往下随机产生敌人(敌机+小蜜蜂)
+
+class FlyingObject{//飞行物
+   image,width,height,x,y
+}
+interface Enemy{//敌机
+   int getScore();
+}
+interface Award{//奖励
+   int getType();
+}
+class Hero extends FlyingObject{//英雄机
+}
+class Airplane extends FlyingObject implements Enemy{//敌机
+}
+class Bee extends FlyingObject implements Award{//小蜜蜂
+}
+class Bullet extends FlyingObject{//子弹
+}
+class ShootGame{
+     public static void main(String[] args){
+     }
+}
+
+上午共15个
+此时完成了9个
+还剩下6个步骤：
+    前4个步骤---------写4个类的构造方法
+    第5个步骤---------画窗口
+    第6个步骤--------在窗口画对象
+    
+int a = (int)(Math.random()*100);//0到99的
+
+Random rand = new Random();
+int a = rand.nextInt(2);//0到1的
+    
+    
