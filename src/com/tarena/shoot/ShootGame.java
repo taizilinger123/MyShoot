@@ -1,10 +1,11 @@
 package com.tarena.shoot;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /** 主程序类 */
-public class ShootGame {
+public class ShootGame extends JPanel{
 	public static final int WIDTH = 400;//窗口宽
 	public static final int HEIGHT = 654;//窗口高
 	
@@ -34,7 +35,14 @@ public class ShootGame {
 		}
 	}
 	public static void main(String[] args) {
-
-
+       JFrame frame = new JFrame("Fly");
+       ShootGame game = new ShootGame();
+       frame.add(game);
+       frame.setSize(WIDTH,HEIGHT);
+       frame.setAlwaysOnTop(true);
+       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       frame.setLocationRelativeTo(null);
+       frame.setVisible(true);
+ 
 	}
 }

@@ -50,11 +50,33 @@ class ShootGame{
 还剩下6个步骤：
     前4个步骤---------写4个类的构造方法
     第5个步骤---------画窗口
-    第6个步骤--------在窗口画对象
+    第6个步骤---------在窗口画对象
     
 int a = (int)(Math.random()*100);//0到99的
 
 Random rand = new Random();
 int a = rand.nextInt(2);//0到1的
+
+C/S:客户端/服务器
+B/S:浏览器/服务器
+
+swing:
+1.JFrame:框架
+2.JPanel:面板
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     
