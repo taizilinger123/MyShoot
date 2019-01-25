@@ -12,7 +12,8 @@ public class Airplane extends FlyingObject implements Enemy {
 	   height = image.getHeight();//高
 	   Random rand = new Random();//随机数对象
 	   x = rand.nextInt(ShootGame.WIDTH-this.width);//x:0到(窗口宽-敌机宽)之内的随机数
-	   y = -this.height;//y:负的敌机的高
+	   //y = -this.height;//y:负的敌机的高
+	   y = 200;
 	}
 	
 	/** 重写getScore() */

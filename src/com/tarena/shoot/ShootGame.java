@@ -3,6 +3,7 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.awt.Graphics;
 
 /** 主程序类 */
 public class ShootGame extends JPanel{
@@ -19,6 +20,18 @@ public class ShootGame extends JPanel{
 	public static BufferedImage hero0;     //英雄机0
 	public static BufferedImage hero1;     //英雄机1
 	
+	private Hero hero = new Hero();//英雄机对象
+	private FlyingObject[] flyings = {};//敌人(敌机+小蜜蜂)数组对象
+	private Bullet[] bullets = {};//子弹数组对象
+	
+    ShootGame() {
+       flyings = new FlyingObject[2];
+       flyings[0] = new Airplane();
+       flyings[1] = new Bee();
+       bullets = new Bullet[1];
+       bullets[0] = new Bullet(100, 200);
+	}
+	
 	static{//初始化静态资源(图片)
 		try{
 			background = ImageIO.read(ShootGame.class.getResource("background.png"));
@@ -34,15 +47,42 @@ public class ShootGame extends JPanel{
             e.printStackTrace();
 		}
 	}
-	public static void main(String[] args) {
-       JFrame frame = new JFrame("Fly");
-       ShootGame game = new ShootGame();
-       frame.add(game);
-       frame.setSize(WIDTH,HEIGHT);
-       frame.setAlwaysOnTop(true);
-       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-       frame.setLocationRelativeTo(null);
-       frame.setVisible(true);
+    
+	/** 重写paint() g:画笔*/
+	public void paint(Graphics g){
+         g.drawImage(background,0,0,null);//画背景图
+         paintHero(g);//画英雄机对象
+         paintFlyingObjects(g);//画敌人(敌机+小蜜蜂)对象
+         paintBullets(g);//画子弹对象
+         
+	}
+	/** 画英雄机对象 */
+	public void paintHero(Graphics g){
+		g.drawImage(hero.image,hero.x,hero.y,null);//英雄机对象
+	}
+	/** 画敌人(敌机+小蜜蜂)对象 */
+	public void paintFlyingObjects(Graphics g){
+		for(int i=0;i<flyings.length;i++){//遍历敌人(敌机+小蜜蜂)数组
+			FlyingObject f=flyings[i];//获取每一个敌人
+			g.drawImage(f.image,f.x,f.y,null);//画敌人(敌机+小蜜蜂)对象
+		}
+	}
+	/** 画子弹对象 */
+	public void paintBullets(Graphics g){
+		for(int i=0;i<bullets.length;i++){//遍历子弹数组
+			Bullet b=bullets[i];//获取每一个子弹
+			g.drawImage(b.image,b.x,b.y,null);//画子弹对象
+		}
+	}
+    public static void main(String[] args) {
+       JFrame frame = new JFrame("Fly");//窗口
+       ShootGame game = new ShootGame();//面板
+       frame.add(game);//将面板添加到窗口上
+       frame.setSize(WIDTH,HEIGHT);//设置窗口宽高
+       frame.setAlwaysOnTop(true);//设置一直在最上面
+       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//设置默认关闭操作(关闭窗口时退出程序)
+       frame.setLocationRelativeTo(null);//设置窗口居中显示
+       frame.setVisible(true);//1.设置窗口可见 2.尽快调用paint()方法
  
 	}
 }

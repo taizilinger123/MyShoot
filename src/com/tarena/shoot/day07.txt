@@ -52,6 +52,17 @@ class ShootGame{
     第5个步骤---------画窗口
     第6个步骤---------在窗口画对象
     
+在窗口上画对象
+1.有窗口-----------完了
+2.有对象-----------完了
+3.窗口上画对象
+
+Hero hero = new Hero();
+Bullet[] bullets = {};
+FlyingObject[] flyings = {};//敌人(敌人+小蜜蜂)
+
+
+
 int a = (int)(Math.random()*100);//0到99的
 
 Random rand = new Random();
@@ -64,7 +75,15 @@ swing:
 1.JFrame:框架
 2.JPanel:面板
 
+frame.setVisible(true);//尽快调用paint()
+1.调用了paint()方法
+2.自己没有写paint()
+3.但是还不报错
+4.原因:
+   Jpanel父类中有一个paint()方法,什么也没帮你画
+         需要重写paint()方法
 
+paint()方法非常特殊:只能由系统来调用
 
 
 
