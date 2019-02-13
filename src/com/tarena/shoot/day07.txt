@@ -86,16 +86,125 @@ frame.setVisible(true);//尽快调用paint()
 paint()方法非常特殊:只能由系统来调用
 
 
+Shoot射击游戏第一天
+1.class FlyingObject{
+    image,width,height,x,y
+}
+2.interface Enemy{
+    int getScore();
+}
+3.interface Award{
+    DOUBLE_FILE,LIFE
+    int getType();
+}
+4.class Airplane  extends 1 implements 2{
+    speed
+    Airplane(){}
+           重写getScore()
+}
+5.class Bee extends 1 implements 3{
+    xSpeed,ySpeed,awardType
+    Bee(){}
+           重写getType()
+}
+6.class Bullet extends 1{
+    speed
+    Bullet(int x, int y){}
+}
+7.class Hero extends 1{
+     life,doubleFire,images,index
+     Hero(){}
+}
+8.class ShootGame extends JPanel{
+     WIDTH,HEIGHT
+     
+     background,start,pause,gameover
+     airplane,bee,bullet,hero0,hero1
+     static{}//做4个类的构造方法
+     
+     main(){
+       ...
+       frame.setVisible(true);//1.可见 2.尽快调paint()
+     }
+     
+     hero(Hero)
+     flyings(FlyingObject[])
+     bullets(Bullet[])
+     ShootGame(){初始化对象}
+     
+               重写paint(g){
+                     画背景图
+       paintHero(g);
+       paintFlyingObjects(g);
+       paintBullets(g);         
+      }
+     paintHero(g){}//画英雄机
+     paintFlyingObjects(g){}//画敌人
+     paintBullets(g){}//画子弹
+
+}
 
 
+Shoot射击游戏第二天：
+1.敌人入场
+2.飞行物(敌机，小蜜蜂，子弹，英雄机)走一步
+3.子弹入场
+4.英雄机随着鼠标动
+5.删除越界的飞行物
 
+敌人入场：定时发生的
+1.创建敌人(敌机+小蜜蜂)对象 
+2.将敌人对象添加到flyings数组中
 
+TimerTask       
+                   TimerTask tt
+timer.schedule(new TimerTask(){
+    public void run(){//定时干的那个事
+    
+    }
+},10,10);
 
+class Aoo extends TimerTask{}
 
+第一个10：从程序启动到第一次触发的时间间隔
+第二个10：第一次触发到第二次触发的时间间隔
+                      第二次触发到第三次触发的时间间隔
+                      第三次触发到第四次触发的时间间隔
 
+定个表明天早上7点
 
+定时器Timer 
+//生成敌人(敌机+小蜜蜂)对象
+public FlyingObject nextOne(){
+    return new Airplane();
+}
 
+子弹入场：
+1.创建子弹对象 
+2.将子弹对象添加到bullets数组中
 
+1.敌人入场的实现步骤：
+  1)main(){game.action();}
+  2)action(){
+     ...
+     run(){//10毫秒定时执行
+       enteredAction();//敌人入场
+       }
+     }
 
+  3)int index = 0;
+    enterAction(){ //10毫秒走一次
+        index++;
+		if(index%40==0){//40*10毫秒
+			FlyingObject one = nextOne();//获取敌人(敌机+小蜜蜂)对象 
+			flyings = Arrays.copyOf(flyings, flyings.length+1);//扩容
+			flyings[flyings.length-1] = one;//将生成的敌人对象添加到数组的最后一个元素上			
+		}
+	}
+  4)nextOne(){
+	     生成0到19的随机数
+	     为0时return new Bee();
+	     否则return new Airplane();
+    }
     
     

@@ -4,6 +4,10 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Graphics;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.Arrays;
 
 /** 主程序类 */
 public class ShootGame extends JPanel{
@@ -24,14 +28,6 @@ public class ShootGame extends JPanel{
 	private FlyingObject[] flyings = {};//敌人(敌机+小蜜蜂)数组对象
 	private Bullet[] bullets = {};//子弹数组对象
 	
-    ShootGame() {
-       flyings = new FlyingObject[2];
-       flyings[0] = new Airplane();
-       flyings[1] = new Bee();
-       bullets = new Bullet[1];
-       bullets[0] = new Bullet(100, 200);
-	}
-	
 	static{//初始化静态资源(图片)
 		try{
 			background = ImageIO.read(ShootGame.class.getResource("background.png"));
@@ -48,6 +44,42 @@ public class ShootGame extends JPanel{
 		}
 	}
     
+	/** 生成敌人(敌机+小蜜蜂)对象 */
+	public FlyingObject nextOne(){
+		Random rand = new Random();//创建随机数对象
+		int type = rand.nextInt(20);//生成0到19随机数
+		if(type < 4){//随机数<4时返回蜜蜂对象
+			return new Bee();
+		}else{//随机数为4到19之间时返回敌机对象
+			return new Airplane();
+		}
+	}
+    
+	int flyEnteredIndex = 0;//敌人入场计数
+	/** 敌人(敌机+小蜜蜂)入场  */
+	public void  enterAction(){ //10毫秒走一次
+		flyEnteredIndex++;//每10毫秒加1
+		if(flyEnteredIndex%40==0){//每400(10*40)毫秒走一次
+			FlyingObject one = nextOne();//获取敌人(敌机+小蜜蜂)对象 
+			flyings = Arrays.copyOf(flyings, flyings.length+1);//扩容
+			flyings[flyings.length-1] = one;//将生成的敌人对象添加到数组的最后一个元素上			
+		}
+	}
+	
+	/** 启动程序的执行 */
+	public void action(){
+		Timer  timer = new Timer();//创建定时器对象
+		int intervel = 10;//时间间隔(以毫秒为单位)
+		timer.schedule(new TimerTask(){
+			public void run(){//10毫秒走一次--定时干的哪个事
+				enterAction();
+			}
+		},intervel,intervel);
+
+		
+		
+		
+	}
 	/** 重写paint() g:画笔*/
 	public void paint(Graphics g){
          g.drawImage(background,0,0,null);//画背景图
@@ -76,7 +108,7 @@ public class ShootGame extends JPanel{
 	}
     public static void main(String[] args) {
        JFrame frame = new JFrame("Fly");//窗口
-       ShootGame game = new ShootGame();//面板
+       ShootGame game = new ShootGame();//面板     
        frame.add(game);//将面板添加到窗口上
        frame.setSize(WIDTH,HEIGHT);//设置窗口宽高
        frame.setAlwaysOnTop(true);//设置一直在最上面
@@ -84,5 +116,6 @@ public class ShootGame extends JPanel{
        frame.setLocationRelativeTo(null);//设置窗口居中显示
        frame.setVisible(true);//1.设置窗口可见 2.尽快调用paint()方法
  
+       game.action();//启动程序的执行
 	}
 }
