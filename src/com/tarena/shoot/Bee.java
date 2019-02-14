@@ -23,4 +23,16 @@ public class Bee extends FlyingObject implements Award{
     public int getType(){
 		return awardType;//返回奖励类型(0或1)
 	}
+    
+	/** 重写step() */
+    public void step(){
+    	x+=xSpeed;//x+(向左或向右)
+    	y+=ySpeed;//y+(向下)
+    	if(x>=ShootGame.WIDTH-this.width){//x>=(窗口宽-蜜蜂宽)时，x-(向左)
+    		xSpeed = -1;
+    	}
+    	if(x<=0){//x<=0时，x+(向右)
+    		xSpeed = 1;
+    	}
+    }
 }

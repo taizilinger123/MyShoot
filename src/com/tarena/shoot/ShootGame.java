@@ -66,13 +66,39 @@ public class ShootGame extends JPanel{
 		}
 	}
 	
+	/** 飞行物(敌机、小蜜蜂、子弹、英雄机)走一步  */
+	public void stepAction(){//10毫秒走一次
+		hero.step();//英雄机走一步
+		for(int i=0;i<flyings.length;i++){//遍历所有敌人
+			flyings[i].step();//敌人走一步
+		}
+		for(int i=0;i<bullets.length;i++){//遍历所有子弹
+			bullets[i].step();//子弹走一步
+		}
+	}
+	
+	int shootIndex = 0;//子弹入场计数
+	/** 子弹入场(英雄机发射子弹)  */
+	public void shootAction(){//10毫秒走一次		
+		shootIndex++;//每10毫秒加1
+		if(shootIndex%30==0){//每300(30*10)毫秒走一次
+			//获取子弹对象，将子弹对象添加到bullets数组中
+			Bullet[] bs = hero.shoot();//获取子弹对象
+			bullets = Arrays.copyOf(bullets, bullets.length+bs.length);//扩容(bs有几个元素就扩大几个容量)
+			System.arraycopy(bs,0,bullets,bullets.length-bs.length,bs.length);//数组的追加
+		}		
+	}
+	
 	/** 启动程序的执行 */
 	public void action(){
 		Timer  timer = new Timer();//创建定时器对象
 		int intervel = 10;//时间间隔(以毫秒为单位)
 		timer.schedule(new TimerTask(){
 			public void run(){//10毫秒走一次--定时干的哪个事
-				enterAction();
+				enterAction();//敌人(敌机+小蜜蜂)入场
+				stepAction();//飞行物走一步				
+				shootAction();//子弹入场(英雄机发射子弹)				
+				repaint();//重画--调用paint()方法
 			}
 		},intervel,intervel);
 

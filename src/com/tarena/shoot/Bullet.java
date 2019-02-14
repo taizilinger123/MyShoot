@@ -12,4 +12,9 @@ public class Bullet extends FlyingObject {
 	   this.x = x;//子弹的x
 	   this.y = y;//子弹的y
    }
+   
+	/** 重写step() */
+   public void step(){
+   	 y-=speed;//y-(向上)
+   }
 }

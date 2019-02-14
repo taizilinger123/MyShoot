@@ -19,4 +19,10 @@ public class Airplane extends FlyingObject implements Enemy {
 	public int getScore(){
 		return 5;//打掉一个敌机得5分
 	}
+    
+	/** 重写step() */
+    public void step(){
+    	y+=speed;//y+(向下)
+    }
+
 }

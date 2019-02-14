@@ -146,11 +146,44 @@ Shoot射击游戏第一天
 
 
 Shoot射击游戏第二天：
-1.敌人入场
+1.敌人(敌机+小蜜蜂)入场
 2.飞行物(敌机，小蜜蜂，子弹，英雄机)走一步
 3.子弹入场
 4.英雄机随着鼠标动
 5.删除越界的飞行物
+
+
+Bullet[] bs = hero.shoot();
+bullets = Arrays.copyOf(bullets, bullets.length+bs.length);
+System.arraycopy(bs,0,bullets,bullets.length-bs.length,bs.length);
+
+
+
+
+
+打掉一个得40
+发射一次双倍火力减2
+
+
+子弹入场：
+1.创建子弹对象
+2.将子弹对象添加到bullets数组中
+
+敌人如何出现的？
+------从上面随机产生的
+
+子弹如何出现的？
+------由英雄机发射出来的
+
+
+
+bullets元素个数为0
+
+
+paint()调用方式两种：
+1.frame.setVisible(true);
+2.repaint();
+
 
 敌人入场：定时发生的
 1.创建敌人(敌机+小蜜蜂)对象 
@@ -206,5 +239,19 @@ public FlyingObject nextOne(){
 	     为0时return new Bee();
 	     否则return new Airplane();
     }
-    
+ 
+ 1)FlyingObject----抽象方法step();
+ 2)Airplane,Bee,Bullet,Hero---重写step()
+ 3)action(){
+     run(){
+         enterAction();
+         stepAction();
+         repaint();//重画
+         }
+    }
+ 4)stepAction(){
+	      遍历所有敌人，调用step()
+	      遍历所有子弹，调用step()
+	  hero.step();
+  }
     
