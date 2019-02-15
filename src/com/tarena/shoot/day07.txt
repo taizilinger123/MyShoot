@@ -152,14 +152,44 @@ Shoot射击游戏第二天：
 4.英雄机随着鼠标动
 5.删除越界的飞行物
 
+java的设计
+
+swing中的事件:
+1.事件：发生了一件事
+2.事件的处理：发生那个事之后所做的操作 
+3.侦听器：
+
+侦听器：
+1.先有个侦听器
+2.把侦听器添加到面板上
+
+MouseListener  l = new  MouseListener(){
+                   重写5个方法
+};
+MouseMotionListener ll = new MouseMotionListener(){
+                  重写2个方法
+}; 
+
+MouseAdapter l = new MouseAdapter(){
+                  重写鼠标移动事件
+                  重写鼠标点击事件
+      ---用哪个重写哪个
+};
+this.addMouseListener(l);
+this.addMouseMotionListener(l);
+
+
+
+事件                                  事件处理
+鼠标点击                     从启动状态变为运行状态
+鼠标移动                     英雄机随着动
+鼠标移出                    从运行状态变为暂停状态
+鼠标移入                    从暂停状态变为运行状态
+ 
 
 Bullet[] bs = hero.shoot();
 bullets = Arrays.copyOf(bullets, bullets.length+bs.length);
 System.arraycopy(bs,0,bullets,bullets.length-bs.length,bs.length);
-
-
-
-
 
 打掉一个得40
 发射一次双倍火力减2

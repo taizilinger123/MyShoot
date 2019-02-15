@@ -4,10 +4,14 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseMotionAdapter;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Arrays;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /** 主程序类 */
 public class ShootGame extends JPanel{
@@ -91,6 +95,18 @@ public class ShootGame extends JPanel{
 	
 	/** 启动程序的执行 */
 	public void action(){
+		//创建侦听器对象
+		MouseAdapter l = new MouseAdapter(){
+			/** 重写鼠标移动事件  */
+			public void mouseMoved(MouseEvent e){
+				int x = e.getX();//获取鼠标的x坐标
+				int y = e.getY();//获取鼠标的y坐标
+				hero.moveTo(x, y);//英雄机随着鼠标移动
+			}
+		}; 
+		this.addMouseListener(l);//处理鼠标操作事件
+		this.addMouseMotionListener(l);//处理鼠标滑动事件
+		
 		Timer  timer = new Timer();//创建定时器对象
 		int intervel = 10;//时间间隔(以毫秒为单位)
 		timer.schedule(new TimerTask(){

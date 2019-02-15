@@ -67,5 +67,10 @@ public class Hero extends FlyingObject {
 	    	return bs;
 	    }
    }
-
+   
+   /** 英雄机随着鼠标移动 x:鼠标的x坐标 y:鼠标的y坐标  */
+   public void moveTo(int x,int y){
+	   this.x = x - this.width/2;//英雄机的x=鼠标的x-1/2英雄机得宽
+	   this.y = y - this.height/2;//英雄机的y=鼠标的y-1/2英雄机的高
+   }
 }
