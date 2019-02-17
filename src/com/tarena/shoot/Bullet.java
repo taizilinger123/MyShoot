@@ -17,4 +17,9 @@ public class Bullet extends FlyingObject {
    public void step(){
    	 y-=speed;//y-(向上)
    }
+
+   /** 重写outOfBounds() */
+   public boolean outOfBounds(){
+   	  return this.y<=-this.height;//子弹的y<=负的子弹的高,即为越界
+   }
 }

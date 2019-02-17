@@ -35,4 +35,9 @@ public class Bee extends FlyingObject implements Award{
     		xSpeed = 1;
     	}
     }
+    
+    /** 重写outOfBounds() */
+    public boolean outOfBounds(){
+    	return this.y>=ShootGame.HEIGHT;//蜜蜂的y>=窗口的高，即为越界
+    }
 }

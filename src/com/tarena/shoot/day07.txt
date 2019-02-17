@@ -152,6 +152,35 @@ Shoot射击游戏第二天：
 4.英雄机随着鼠标动
 5.删除越界的飞行物
 
+50个元素，其中有20个越界了
+
+/** 删除越界的敌人(敌机+小蜜蜂)和子弹 */
+public void  outOfBoundsAction(){
+  for(int i=0;i<flyings.length;i++){
+      FlyingObject f = flyings[i];
+      if(f.outOfBounds()){//越界了
+                             从flyings数组中删除(缩容)
+      }
+   } 
+}
+
+500000个元素，其中有2000个越界了
+更简便的方式------
+public void outOfBoundsAction(){
+  int index = 0;//不越界的敌人个数
+  FlyingObject[] flyingLives = new FlyingObject[flyings.length];
+  for(int i=0;i<flyings.length;i++){
+    FlyingObject f = flyings[i];
+    if(!f.outOfBounds()){//不越界
+        flyingLives[index] = f;
+        index++;
+    }
+  }  
+  flyings = Arrays.copyOf(flyingLives, index);        
+}
+
+
+
 java的设计
 
 swing中的事件:

@@ -73,4 +73,9 @@ public class Hero extends FlyingObject {
 	   this.x = x - this.width/2;//英雄机的x=鼠标的x-1/2英雄机得宽
 	   this.y = y - this.height/2;//英雄机的y=鼠标的y-1/2英雄机的高
    }
+   
+   /** 重写outOfBounds() */
+   public boolean outOfBounds(){
+   	   return false;//永不越界
+   }
 }

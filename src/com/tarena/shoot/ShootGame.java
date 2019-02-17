@@ -92,7 +92,19 @@ public class ShootGame extends JPanel{
 			System.arraycopy(bs,0,bullets,bullets.length-bs.length,bs.length);//数组的追加
 		}		
 	}
-	
+	/** 删除越界的敌人(敌机+小蜜蜂)和子弹 */
+	public void  outOfBoundsAction(){
+		int index = 0;//1.不越界的敌人数组的下标 2.不越界敌人的个数
+		FlyingObject[] flyingLives = new FlyingObject[flyings.length];//不越界敌人数组
+		for(int i=0;i<flyings.length;i++){//遍历敌人数组
+			FlyingObject f = flyings[i];//获取每一个敌人
+			if(!f.outOfBounds()){//若不越界
+		        flyingLives[index] = f;//将不越界的敌人对象添加到不越界敌人数组中
+		        index++;//1.不越界敌人数组下标增一  2.不越界敌人个数增一
+	        }
+		}
+		flyings = Arrays.copyOf(flyingLives, index);//将不越界的敌人复制到flyings中，index为不越界敌人的个数，即flyings的长度    
+	}
 	/** 启动程序的执行 */
 	public void action(){
 		//创建侦听器对象
@@ -113,14 +125,11 @@ public class ShootGame extends JPanel{
 			public void run(){//10毫秒走一次--定时干的哪个事
 				enterAction();//敌人(敌机+小蜜蜂)入场
 				stepAction();//飞行物走一步				
-				shootAction();//子弹入场(英雄机发射子弹)				
+				shootAction();//子弹入场(英雄机发射子弹)	
+				outOfBoundsAction();//删除越界的敌人(敌机+小蜜蜂)和子弹
 				repaint();//重画--调用paint()方法
 			}
-		},intervel,intervel);
-
-		
-		
-		
+		},intervel,intervel);	
 	}
 	/** 重写paint() g:画笔*/
 	public void paint(Graphics g){

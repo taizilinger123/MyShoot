@@ -11,4 +11,7 @@ public abstract class FlyingObject {
     
     /** 飞行物走一步 */
     public abstract void step();
+    
+    /** 检查是否出界  返回true表示已越界 */
+    public abstract boolean outOfBounds();
 }
