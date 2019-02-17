@@ -104,6 +104,17 @@ public class ShootGame extends JPanel{
 	        }
 		}
 		flyings = Arrays.copyOf(flyingLives, index);//将不越界的敌人复制到flyings中，index为不越界敌人的个数，即flyings的长度    
+	
+		index = 0;//归零
+		Bullet[] bulletLives = new Bullet[bullets.length];//不越界子弹数组
+		for(int i=0;i<bullets.length;i++){//遍历子弹数组
+			Bullet b = bullets[i];//获取每一个子弹
+			if(!b.outOfBounds()){//若不越界
+		        bulletLives[index] = b;//将不越界的子弹对象添加到不越界子弹数组中
+		        index++;//1.不越界子弹数组下标增一  2.不越界子弹个数增一
+	        }
+		}
+		bullets = Arrays.copyOf(bulletLives, index);//将不越界的子弹复制到bullets中，index为不越界子弹的个数，即bullets的长度
 	}
 	/** 启动程序的执行 */
 	public void action(){
