@@ -281,11 +281,12 @@ public FlyingObject nextOne(){
      ...
      run(){//10毫秒定时执行
        enteredAction();//敌人入场
+       repaint();
        }
      }
 
   3)int index = 0;
-    enterAction(){ //10毫秒走一次
+    enterAction(){ //10毫秒
         index++;
 		if(index%40==0){//40*10毫秒
 			FlyingObject one = nextOne();//获取敌人(敌机+小蜜蜂)对象 
@@ -298,7 +299,7 @@ public FlyingObject nextOne(){
 	     为0时return new Bee();
 	     否则return new Airplane();
     }
- 
+ 2.飞行物走一步的实现步骤：
  1)FlyingObject----抽象方法step();
  2)Airplane,Bee,Bullet,Hero---重写step()
  3)action(){
@@ -312,5 +313,59 @@ public FlyingObject nextOne(){
 	      遍历所有敌人，调用step()
 	      遍历所有子弹，调用step()
 	  hero.step();
-  }
+}
+3.子弹入场的实现步骤：
+1)Hero---shoot()英雄机发射子弹
+2)action(){
+    run(){
+      ...
+      shootAction();//发射子弹
+      repaint();
+     }
+ } 
+ 3)int shootIndex = 0;
+   shootAction(){ //10毫秒走一次
+     shootIndex++;
+		if(shootIndex%30==0){//每300(30*10)毫秒走一次
+			//获取子弹对象，将子弹对象添加到bullets数组中
+			Bullet[] bs = hero.shoot();//获取子弹对象
+			bullets = Arrays.copyOf(bullets, bullets.length+bs.length);//扩容(bs有几个元素就扩大几个容量)
+			System.arraycopy(bs,0,bullets,bullets.length-bs.length,bs.length);//数组的追加
+		}		
+	}
+}
+4.英雄机随着鼠标移动的实现步骤
+  1)Hero---moveTo(int x,int y)
+  2)action(){
+     MouseAdapter l = new MouseAdapter(){
+                            重写MouseMoved(){
+                                       获取鼠标的x和y
+             hero.moveTo(x,y);//移动     
+       } 
+     };
+     this.addMouseMotionListener(l);
+     this.addMouseListener(l);
+     
+     run(){
+        ... 
+     }
+   }
+5.删除越界的敌人和子弹的实现步骤：
+  1)FlyingObject-------abstract outOfBounds();
+  2)Airplane,bee,bullet,Hero--重写outOfBounds()
+  3)action(){
+     run(){
+       ...
+       outOfBoundsAction();//删除越界的
+       repaint();
+     }
+   }
+  4)outOfBoundsAction(){
+     1)声明活着的数组
+     2)遍历flyings/bullets数组
+                     判断对象是否不越界:
+                     若true:
+                                将对象添加到活着的数组中
+     3)将活着的数组复制到flyings/bullets数组中
+   } 
     
