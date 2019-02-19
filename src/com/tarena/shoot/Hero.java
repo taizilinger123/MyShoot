@@ -78,4 +78,19 @@ public class Hero extends FlyingObject {
    public boolean outOfBounds(){
    	   return false;//永不越界
    }
+   
+   /** 增命 */
+   public void addLife(){
+	   life++;//命数增1
+   }
+   
+   /** 获取命 */
+   public int getLife(){
+	   return life;//返回命数
+   }
+   /** 增火力 */
+   public void addDoubleFire(){
+	   doubleFire+=40;//火力值增40
+   }
+   
 }

@@ -3,6 +3,7 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
@@ -10,8 +11,9 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Arrays;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Color;
+import java.awt.Font;
 
 /** 主程序类 */
 public class ShootGame extends JPanel{
@@ -116,6 +118,52 @@ public class ShootGame extends JPanel{
 		}
 		bullets = Arrays.copyOf(bulletLives, index);//将不越界的子弹复制到bullets中，index为不越界子弹的个数，即bullets的长度
 	}
+	/** 所有子弹与所有敌人(敌机+小蜜蜂)的碰撞 */
+	public void bangAction(){
+		for(int i=0;i<bullets.length;i++){//遍历所有的子弹
+			Bullet b = bullets[i];//获取每一个子弹
+			bang(b);//1个子弹与所有敌人的碰撞
+		}
+	}
+	
+	int score = 0;//得分
+	/** 1个子弹与所有敌人的碰撞  */
+	public void bang(Bullet b){
+		int index = -1;//被撞敌人的下标
+		for(int i=0;i<flyings.length;i++){//遍历所有敌人
+			FlyingObject f = flyings[i];//获取每一个敌人
+			if(f.shootBy(b)){//撞上了
+				index = i;//记录被撞敌人的下标
+				break;//其余敌人不再比较了
+			}
+		}
+		if(index!=-1){//撞上了
+			FlyingObject one = flyings[index];//获取被撞的敌人
+			if(one instanceof Enemy){//若是敌人
+				Enemy e = (Enemy)one;//将one强转为敌人
+				score += e.getScore();//玩家得分 
+			}
+			if(one instanceof Award){//若是奖励
+				Award a = (Award)one;//强转为奖励
+				int type = a.getType();//获取奖励类型
+				switch(type){//根据奖励类型的不同来获取不同的奖励
+				case Award.DOUBLE_FIRE://若为火力
+					hero.addDoubleFire();//英雄机增火力
+				    break;
+				case Award.LIFE://若为命
+					hero.addLife();//英雄机增命
+					break;			
+				}
+			}
+			  //将被撞敌人与数组最后一个元素交换
+		      FlyingObject t = flyings[index];
+		      flyings[index] = flyings[flyings.length-1];
+		      flyings[flyings.length-1] = t;
+		      //缩容(去掉最后一个元素，即被撞的敌人对象)
+		      flyings = Arrays.copyOf(flyings,flyings.length-1);
+		}
+	}
+	
 	/** 启动程序的执行 */
 	public void action(){
 		//创建侦听器对象
@@ -138,6 +186,7 @@ public class ShootGame extends JPanel{
 				stepAction();//飞行物走一步				
 				shootAction();//子弹入场(英雄机发射子弹)	
 				outOfBoundsAction();//删除越界的敌人(敌机+小蜜蜂)和子弹
+				bangAction();//子弹与敌人(敌机+小蜜蜂)的碰撞
 				repaint();//重画--调用paint()方法
 			}
 		},intervel,intervel);	
@@ -148,7 +197,7 @@ public class ShootGame extends JPanel{
          paintHero(g);//画英雄机对象
          paintFlyingObjects(g);//画敌人(敌机+小蜜蜂)对象
          paintBullets(g);//画子弹对象
-         
+         paintScoreAndLife(g);//画分和画命
 	}
 	/** 画英雄机对象 */
 	public void paintHero(Graphics g){
@@ -168,6 +217,14 @@ public class ShootGame extends JPanel{
 			g.drawImage(b.image,b.x,b.y,null);//画子弹对象
 		}
 	}
+    /** 画分和画命 */
+	public void paintScoreAndLife(Graphics g){
+		g.setColor(new Color(0xFF0000));//设置颜色--纯红
+		g.setFont(new Font(Font.SANS_SERIF,Font.BOLD,24));//设置字体样式(SANS_SERIF:字体  BOLD:加粗   24:字号)
+		g.drawString("SCORE："+score,10,25);//画分
+		g.drawString("LIFE："+hero.getLife(),10,45);//画命
+	}
+	
     public static void main(String[] args) {
        JFrame frame = new JFrame("Fly");//窗口
        ShootGame game = new ShootGame();//面板     
