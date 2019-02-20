@@ -374,6 +374,42 @@ Shoot射击游戏第三天
 3.英雄机与敌人(敌机+小蜜蜂)的碰撞
 4.画状态
 
+若撞上了：
+1)英雄机减命，英雄机火力值归零
+2)敌人消失
+
+1个英雄机与所有敌人比
+
+public boolean isGameOver(){
+   for(int i=0;i<flyings.length;i++){
+      FlyingObject f = flyings[i];
+      if(hero.hit(f)){//撞上了
+        hero.substractLife();
+        hero.clearDoubleFire();
+                        交换并缩容
+      }
+   }
+   return hero.getLife()<=0;//英雄机命数<=0,即为游戏结束
+}
+
+剩1条命
+
+class Hero{
+   //英雄机撞敌人
+   public boolean hit(FlyingObject obj){
+     this:英雄机
+     obj:敌人
+   }
+}
+
+class FlyingObject{
+   //敌人被英雄机撞
+   public boolean hitBy(Hero obj){
+     this:敌人
+     obj:英雄机
+   }
+}
+
 RGB:三原色，三基色
 R:红色
 G:绿色

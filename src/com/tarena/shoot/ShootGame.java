@@ -164,6 +164,31 @@ public class ShootGame extends JPanel{
 		}
 	}
 	
+	/** 检查游戏结束 */
+	public void checkGameOverAction(){
+		if(isGameOver()){ //游戏结束
+			
+		}
+	}
+	
+	/** 判断游戏是否结束  返回true则游戏结束 */
+	public boolean isGameOver(){
+		for(int i=0;i<flyings.length;i++){//遍历所有的敌人
+			FlyingObject  f = flyings[i];//获取每一个敌人
+			if(hero.hit(f)){//撞上了
+				hero.subtractLife();//英雄机减命
+				hero.clearDoubleFire();//英雄机清空火力值
+				//将被撞敌人与数组最后一个元素交换
+				FlyingObject t = flyings[i];
+				flyings[i] = flyings[flyings.length-1];
+				flyings[flyings.length-1] = t;
+				//缩容(去掉最后一个元素，即被撞的敌人对象)
+				flyings = Arrays.copyOf(flyings, flyings.length-1);
+			}
+		}		
+		return hero.getLife()<=0;//英雄机命数<=0，即为游戏结束
+	}
+	
 	/** 启动程序的执行 */
 	public void action(){
 		//创建侦听器对象
@@ -187,6 +212,7 @@ public class ShootGame extends JPanel{
 				shootAction();//子弹入场(英雄机发射子弹)	
 				outOfBoundsAction();//删除越界的敌人(敌机+小蜜蜂)和子弹
 				bangAction();//子弹与敌人(敌机+小蜜蜂)的碰撞
+				checkGameOverAction();//检查游戏结束
 				repaint();//重画--调用paint()方法
 			}
 		},intervel,intervel);	

@@ -88,9 +88,33 @@ public class Hero extends FlyingObject {
    public int getLife(){
 	   return life;//返回命数
    }
+   
+   /** 减命  */
+   public void subtractLife(){
+	   life--;//命数减1
+   }
+   
    /** 增火力 */
    public void addDoubleFire(){
 	   doubleFire+=40;//火力值增40
+   }
+   
+   /** 清空火力值 */
+   public void clearDoubleFire(){
+	   doubleFire = 0;//火力值归零
+   }
+   
+   /** 英雄机撞敌人 this:英雄机   obj:敌人 */
+   public boolean hit(FlyingObject obj){
+	   int x1 = obj.x - this.width/2;//x1:敌人的x-1/2英雄机的宽
+	   int x2 = obj.x+obj.width+this.width/2;//x2:敌人的x+敌人的宽+1/2英雄机的宽
+	   int y1 = obj.y-this.height/2;//y1:敌人的y-1/2英雄机的高
+	   int y2 = obj.y+obj.height+this.height/2;//y2:敌人的y+敌人的高+1/2英雄机的高
+	   int x = this.x+this.width/2;//x:英雄机的x+1/2英雄机的宽
+	   int y = this.y+this.height/2;//y:英雄机的y+1/2英雄机的高
+	   return x>x1 && x<x2
+			  && 
+			  y>y1 && y<y2;//x在x1和x2之间，并且，y在y1和y2之间，即为撞上了
    }
    
 }
