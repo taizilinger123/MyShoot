@@ -30,6 +30,12 @@ public class ShootGame extends JPanel{
 	public static BufferedImage hero0;     //英雄机0
 	public static BufferedImage hero1;     //英雄机1
 	
+	public static final int START = 0;    //启动状态
+	public static final int RUNNING = 1;  //运行状态 
+	public static final int PAUSE = 2;    //暂停状态
+	public static final int GAME_OVER = 3;//游戏结束状态
+	private int state = START;//当前状态(默认启动状态)
+	
 	private Hero hero = new Hero();//英雄机对象
 	private FlyingObject[] flyings = {};//敌人(敌机+小蜜蜂)数组对象
 	private Bullet[] bullets = {};//子弹数组对象
@@ -167,7 +173,7 @@ public class ShootGame extends JPanel{
 	/** 检查游戏结束 */
 	public void checkGameOverAction(){
 		if(isGameOver()){ //游戏结束
-			
+			state = GAME_OVER;//当前状态改为游戏结束状态
 		}
 	}
 	
@@ -195,9 +201,38 @@ public class ShootGame extends JPanel{
 		MouseAdapter l = new MouseAdapter(){
 			/** 重写鼠标移动事件  */
 			public void mouseMoved(MouseEvent e){
-				int x = e.getX();//获取鼠标的x坐标
-				int y = e.getY();//获取鼠标的y坐标
-				hero.moveTo(x, y);//英雄机随着鼠标移动
+				if(state==RUNNING){//运行状态下
+					int x = e.getX();//获取鼠标的x坐标
+					int y = e.getY();//获取鼠标的y坐标
+					hero.moveTo(x, y);//英雄机随着鼠标移动
+				}
+			}
+			/** 重写鼠标点击事件 */
+			public void mouseClicked(MouseEvent e){
+				switch(state){  //根据当前状态做不同处理
+				case START: //启动状态时
+					state = RUNNING; //变为运行状态
+					break;
+				case GAME_OVER:  //游戏结束状态时
+					score = 0;  //清理现场(数据归零)
+					hero = new Hero();
+					flyings = new FlyingObject[0];
+					bullets = new Bullet[0];
+					state = START;//变为启动状态
+					break;
+				}
+			}
+		    /** 重写鼠标移出事件 */
+			public void mouseExited(MouseEvent e){
+				if(state==RUNNING){//运行状态时
+					state = PAUSE; //改为暂停状态
+				}
+			}
+			/** 重写鼠标移入事件 */
+			public void mouseEntered(MouseEvent e){
+				if(state==PAUSE){   //暂停状态时
+					state = RUNNING;//改为运行状态
+				}
 			}
 		}; 
 		this.addMouseListener(l);//处理鼠标操作事件
@@ -207,12 +242,14 @@ public class ShootGame extends JPanel{
 		int intervel = 10;//时间间隔(以毫秒为单位)
 		timer.schedule(new TimerTask(){
 			public void run(){//10毫秒走一次--定时干的哪个事
-				enterAction();//敌人(敌机+小蜜蜂)入场
-				stepAction();//飞行物走一步				
-				shootAction();//子弹入场(英雄机发射子弹)	
-				outOfBoundsAction();//删除越界的敌人(敌机+小蜜蜂)和子弹
-				bangAction();//子弹与敌人(敌机+小蜜蜂)的碰撞
-				checkGameOverAction();//检查游戏结束
+				if(state==RUNNING){ //运行状态下
+						enterAction();//敌人(敌机+小蜜蜂)入场
+						stepAction();//飞行物走一步				
+						shootAction();//子弹入场(英雄机发射子弹)	
+						outOfBoundsAction();//删除越界的敌人(敌机+小蜜蜂)和子弹
+						bangAction();//子弹与敌人(敌机+小蜜蜂)的碰撞
+						checkGameOverAction();//检查游戏结束
+				}
 				repaint();//重画--调用paint()方法
 			}
 		},intervel,intervel);	
@@ -224,6 +261,7 @@ public class ShootGame extends JPanel{
          paintFlyingObjects(g);//画敌人(敌机+小蜜蜂)对象
          paintBullets(g);//画子弹对象
          paintScoreAndLife(g);//画分和画命
+         paintState(g); //画状态
 	}
 	/** 画英雄机对象 */
 	public void paintHero(Graphics g){
@@ -250,7 +288,20 @@ public class ShootGame extends JPanel{
 		g.drawString("SCORE："+score,10,25);//画分
 		g.drawString("LIFE："+hero.getLife(),10,45);//画命
 	}
-	
+	/** 画状态 */
+	public void paintState(Graphics g){
+		switch(state){ //根据状态的不同来画不同的图片
+		case START://启动状态时画启动图
+			g.drawImage(start,0,0,null);
+			break;
+		case PAUSE://暂停状态时画暂停图
+			g.drawImage(pause,0,0,null);
+			break;
+		case GAME_OVER://游戏结束状态时画游戏结束图
+			g.drawImage(gameover,0,0,null);
+			break;
+		}
+	}
     public static void main(String[] args) {
        JFrame frame = new JFrame("Fly");//窗口
        ShootGame game = new ShootGame();//面板     
