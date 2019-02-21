@@ -545,3 +545,112 @@ class FlyingObject{//敌人
 打的是敌人------玩家得5分
 打的是小蜜蜂----英雄机可能得命，也可能得火力
 敌人(敌机+小蜜蜂)消失
+
+Shoot射击游戏第三天：
+1.子弹和敌人碰撞的实现步骤：
+  1)FlyingObject---shootBy(Bullet b)
+  2)Hero----addDoubleFire(),addLife()
+  3)action(){
+      run(){
+        ... 
+        bangAction();//检查碰撞
+        repaint();     
+      }
+    }
+  4)bangAction(){//所有子弹与所有敌人撞
+                遍历所有子弹，将子弹传给bang()方法
+    }
+  5)bang(Bullet b){//1发子弹与所有敌人撞
+                    遍历所有敌人，获取每一个敌人f
+                    判断f是否与b撞上了
+                    若撞上了：
+        5.1)得分或得奖励
+              5.1.1)得到被撞敌人对象
+              5.1.2)判断是敌人还是奖励
+                                                                  若是敌人则增分
+                                                                  若是奖励则得奖励类型
+                                                                       判断不同的奖励类型：
+                                                                                   增命或增火力值
+        5.2)将被撞对象从flyings中删除
+              5.2.1)将被撞敌人与最后一个元素交换(追尾并绕圈)
+              5.2.2)缩容---删除最后一个元素(被撞的对象)
+  }
+2.画分和画命的实现步骤：
+  1)hero---getLife()获取命
+  2)paint(g){
+       ......
+       paintScore(g);//画分和命
+    }
+  3)paintScore(g){
+                    设置颜色g.setColor(...)
+                    设置字体g.setFont(...)
+                    画分g.drawString(...);
+     }
+3.英雄机与敌人碰撞的实现步骤：
+  1)Hero---boolean hit(FlyingObject other);
+  2)Hero---substractLife()
+           clearDoubleFire()  #setDoubleFire(int doubleFire)
+  3)action(){
+                      重写run(){
+         ...
+         checkGameOverAction();//检测英雄机与敌人
+         repaint();               
+       }
+    }
+  4)checkGameOverAction(){
+     if(isGameOver()){    
+     }
+  }
+  5)isGameOver(){ //检测是否有命
+                 遍历所有敌人，获取每一个敌人f
+                 判断hero.hit(f){
+                         减命
+                         火力值清零
+                         删除被撞的敌人(交换，缩容)            
+      }
+      return hero.getLife()<=0
+  }
+4.画状态的实现步骤：
+  1)START,RUNNING,PAUSE,GAME_OVER
+    state=START(存储当前状态)
+  2)paint(){
+       ...
+       paintState(g);
+     }
+  3)paintState(g){
+      START状态--贴start图
+      PAUSE状态--贴pause图
+      GAME_OVER状态--贴gameover图
+     }
+  4)run(){
+     if(state==RUNNING){
+                             一堆action();
+     }
+     repaint();
+    }
+  5)mouseMoved(){
+     if(state==RUNNING){
+                         获取x,y,调英雄机移动方法
+     }
+    }
+  6)重写mouseClicked(){
+                 若为启动状态，则改为运行状态
+                 若为游戏结束状态，则：
+                          清理现场(hero,flyings,bullets,score)
+                          改为启动状态 
+    }
+  7)checkGameOverAction(){
+      if(isGameOver()){
+         state = GAME_OVER;
+      } 
+    }
+  8)重写mouseExited(){
+      if(state == RUNNING){
+         state = PAUSE;
+      }
+    }
+  9)重写mouseEntered(){
+      if(state == PAUSE){
+         state = RUNNING;
+      } 
+    }

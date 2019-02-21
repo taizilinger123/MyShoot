@@ -311,7 +311,7 @@ public class ShootGame extends JPanel{
        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//设置默认关闭操作(关闭窗口时退出程序)
        frame.setLocationRelativeTo(null);//设置窗口居中显示
        frame.setVisible(true);//1.设置窗口可见 2.尽快调用paint()方法
- 
+       
        game.action();//启动程序的执行
 	}
 }
